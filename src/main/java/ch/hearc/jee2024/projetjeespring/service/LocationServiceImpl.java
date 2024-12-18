@@ -5,7 +5,7 @@ import ch.hearc.jee2024.projetjeespring.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Optional;
 
 @Component
 public class LocationServiceImpl implements LocationService {
@@ -17,26 +17,34 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public Location create(Location location) {
-        return locationRepository.create(location);
+        if (location.getId() != null)
+            location.setId(null);
+        return locationRepository.save(location);
     }
 
     @Override
-    public List<Location> findAll() {
+    public Iterable<Location> findAll() {
         return locationRepository.findAll();
     }
 
     @Override
-    public Location findById(int id) {
+    public Optional<Location> findById(long id) {
         return locationRepository.findById(id);
     }
 
     @Override
-    public boolean update(int id, Location location) {
-        return locationRepository.update(id, location);
+    public boolean update(Location location) {
+        if (!locationRepository.existsById(location.getId()))
+            return false;
+        locationRepository.save(location);
+        return true;
     }
 
     @Override
-    public boolean delete(int id) {
-        return locationRepository.delete(id);
+    public boolean delete(long id) {
+        if (!locationRepository.existsById(id))
+            return false;
+        locationRepository.deleteById(id);
+        return true;
     }
 }

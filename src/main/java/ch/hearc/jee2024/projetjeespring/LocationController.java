@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping("/location")
@@ -19,16 +20,14 @@ public class LocationController {
 
     @GetMapping
     public ResponseEntity<List<Location>> list() {
-        return ResponseEntity.status(200).body(locationService.findAll());
+        return ResponseEntity.ok(StreamSupport.stream(locationService.findAll().spliterator(), false).toList());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Location> show(@PathVariable int id) {
-        Location location = locationService.findById(id);
-        if (location == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.status(200).body(location);
+        return locationService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping()
@@ -37,16 +36,20 @@ public class LocationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable int id, @RequestBody Location location) {
-        if (locationService.update(id, location))
-            return ResponseEntity.status(200).build();
-        return ResponseEntity.status(404).build();
+    public ResponseEntity<String> update(@PathVariable long id, @RequestBody Location location) {
+        if (location.getId() == null)
+            location.setId(id);
+        else if (location.getId() != id)
+            return ResponseEntity.badRequest().build();
+        if (locationService.update(location))
+            return ResponseEntity.ok().build();
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable int id) {
         if (locationService.delete(id))
-            return ResponseEntity.status(204).build();
-        return ResponseEntity.status(404).build();
+            return ResponseEntity.noContent().build();
+        return ResponseEntity.notFound().build();
     }
 }

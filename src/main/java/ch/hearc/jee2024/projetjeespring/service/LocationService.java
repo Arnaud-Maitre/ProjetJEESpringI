@@ -3,13 +3,17 @@ package ch.hearc.jee2024.projetjeespring.service;
 import ch.hearc.jee2024.projetjeespring.model.Location;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public interface LocationService {
-    List<Location> findAll();
-    Location findById(int id);
+    Iterable<Location> findAll();
+
+    Optional<Location> findById(long id);
+
     Location create(Location location);
-    boolean update(int id, Location location);
-    boolean delete(int id);
+
+    boolean update(Location location);
+
+    boolean delete(long id);
 }
