@@ -25,8 +25,8 @@ public class LocationServiceTests {
     private LocationRepository locationRepository;
 
     @Test
-    void callFindAllShouldReturnLocationIterable() throws Exception {
-        Iterable<Location> expected = List.of(new Location(1L, "Test", "A Test", 23.23, 42.42));
+    void callFindAllShouldReturnLocationIterable() {
+        Iterable<Location> expected = List.of(new Location(1L, "Test", "A Test", 23.23, 42.42, List.of()));
 
         Mockito.when(locationRepository.findAll()).thenReturn(expected);
 
@@ -38,8 +38,8 @@ public class LocationServiceTests {
     }
 
     @Test
-    void callFindByIdShouldReturnLocation() throws Exception {
-        Location expected = new Location(1L, "Test", "A Test", 23.23, 42.42);
+    void callFindByIdShouldReturnLocation() {
+        Location expected = new Location(1L, "Test", "A Test", 23.23, 42.42, List.of());
 
         Mockito.when(locationRepository.findById(1L)).thenReturn(Optional.of(expected));
 
@@ -53,7 +53,7 @@ public class LocationServiceTests {
     }
 
     @Test
-    void callFindByIdMissingShouldReturnEmpty() throws Exception {
+    void callFindByIdMissingShouldReturnEmpty() {
         Mockito.when(locationRepository.findById(1L)).thenReturn(Optional.empty());
 
         Optional<Location> result = locationService.findById(1L);
@@ -64,9 +64,9 @@ public class LocationServiceTests {
     }
 
     @Test
-    void callCreateShouldCallSave() throws Exception {
-        Location location = new Location(null, "Test", "A Test", 4.246, 68.54);
-        Location locationWithId = new Location(1L, "Test", "A Test", 4.246, 68.54);
+    void callCreateShouldCallSave() {
+        Location location = new Location(null, "Test", "A Test", 4.246, 68.54, List.of());
+        Location locationWithId = new Location(1L, "Test", "A Test", 4.246, 68.54, List.of());
 
         Mockito.when(locationRepository.save(location)).thenReturn(locationWithId);
 
@@ -79,10 +79,10 @@ public class LocationServiceTests {
     }
 
     @Test
-    void callCreateWithIdShouldCallSaveWithoutId() throws Exception {
-        Location locationOriginalId = new Location(42L, "Test", "A Test", 4.246, 68.54);
-        Location locationNoId = new Location(null, "Test", "A Test", 4.246, 68.54);
-        Location locationNewId = new Location(1L, "Test", "A Test", 4.246, 68.54);
+    void callCreateWithIdShouldCallSaveWithoutId() {
+        Location locationOriginalId = new Location(42L, "Test", "A Test", 4.246, 68.54, List.of());
+        Location locationNoId = new Location(null, "Test", "A Test", 4.246, 68.54, List.of());
+        Location locationNewId = new Location(1L, "Test", "A Test", 4.246, 68.54, List.of());
 
         Mockito.when(locationRepository.save(locationNoId)).thenReturn(locationNewId);
 
@@ -95,8 +95,8 @@ public class LocationServiceTests {
     }
 
     @Test
-    void callUpdateShouldCallSaveAndReturnTrue() throws Exception {
-        Location location = new Location(1L, "Test", "A Test", 4.246, 68.54);
+    void callUpdateShouldCallSaveAndReturnTrue() {
+        Location location = new Location(1L, "Test", "A Test", 4.246, 68.54, List.of());
 
         Mockito.when(locationRepository.existsById(1L)).thenReturn(true);
         Mockito.when(locationRepository.save(location)).thenReturn(location);
@@ -111,8 +111,8 @@ public class LocationServiceTests {
     }
 
     @Test
-    void callUpdateMissingShouldReturnFalse() throws Exception {
-        Location location = new Location(1L, "Test", "A Test", 4.246, 68.54);
+    void callUpdateMissingShouldReturnFalse() {
+        Location location = new Location(1L, "Test", "A Test", 4.246, 68.54, List.of());
 
         Mockito.when(locationRepository.existsById(1L)).thenReturn(false);
 
@@ -125,7 +125,7 @@ public class LocationServiceTests {
     }
 
     @Test
-    void callDeleteShouldCallDeleteByIdAndReturnTrue() throws Exception {
+    void callDeleteShouldCallDeleteByIdAndReturnTrue() {
         Mockito.when(locationRepository.existsById(1L)).thenReturn(true);
 
         boolean result = locationService.delete(1L);
@@ -138,7 +138,7 @@ public class LocationServiceTests {
     }
 
     @Test
-    void callDeleteMissingShouldReturnFalse() throws Exception {
+    void callDeleteMissingShouldReturnFalse() {
         Mockito.when(locationRepository.existsById(1L)).thenReturn(false);
 
         boolean result = locationService.delete(1L);

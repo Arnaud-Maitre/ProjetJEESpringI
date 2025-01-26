@@ -1,4 +1,4 @@
-package ch.hearc.jee2024.projetjeespring;
+package ch.hearc.jee2024.projetjeespring.controller;
 
 import ch.hearc.jee2024.projetjeespring.model.Location;
 import ch.hearc.jee2024.projetjeespring.service.LocationService;
@@ -46,8 +46,8 @@ class LocationControllerTests {
     @Test
     void requestListShouldRespondOkWithLocationList() throws Exception {
         List<Location> locationList = List.of(
-                new Location(1L, "Location", "A location", 2.0, -1.0),
-                new Location(2L, "Location2", "Another location", -5.2, 2.7)
+                new Location(1L, "Location", "A location", 2.0, -1.0, List.of()),
+                new Location(2L, "Location2", "Another location", -5.2, 2.7, List.of())
         );
 
         Mockito.when(locationService.findAll()).thenReturn(locationList);
@@ -76,7 +76,7 @@ class LocationControllerTests {
 
     @Test
     void requestShowShouldRespondOkWithLocation() throws Exception {
-        Location location = new Location(1L, "Test", "A test", 1.0, 1.0);
+        Location location = new Location(1L, "Test", "A test", 1.0, 1.0, List.of());
 
         Mockito.when(locationService.findById(1)).thenReturn(Optional.of(location));
 
@@ -93,8 +93,8 @@ class LocationControllerTests {
 
     @Test
     void requestCreateShouldRespondCreatedWithLocation() throws Exception {
-        Location location = new Location(null, "Test", "A test", 1.0, 1.0);
-        Location locationWithId = new Location(1L, "Test", "A test", 1.0, 1.0);
+        Location location = new Location(null, "Test", "A test", 1.0, 1.0, List.of());
+        Location locationWithId = new Location(1L, "Test", "A test", 1.0, 1.0, List.of());
 
         Mockito.when(locationService.create(Mockito.any(Location.class))).thenReturn(locationWithId);
 
@@ -112,7 +112,7 @@ class LocationControllerTests {
 
     @Test
     void requestUpdateMissingShouldRespondNotFound() throws Exception {
-        Location location = new Location(1L, "Location", "A location", 1.0, 1.0);
+        Location location = new Location(1L, "Location", "A location", 1.0, 1.0, List.of());
 
         Mockito.when(locationService.update(Mockito.any(Location.class))).thenReturn(false);
 
@@ -128,7 +128,7 @@ class LocationControllerTests {
 
     @Test
     void requestUpdateShouldRespondOk() throws Exception {
-        Location location = new Location(1L, "Location", "A location", 1.0, 1.0);
+        Location location = new Location(1L, "Location", "A location", 1.0, 1.0, List.of());
 
         Mockito.when(locationService.update(location)).thenReturn(true);
 
@@ -144,8 +144,8 @@ class LocationControllerTests {
 
     @Test
     void requestUpdateWithLocationIdNullShouldRespondOk() throws Exception {
-        Location location = new Location(null, "Location", "A location", 1.0, 1.0);
-        Location locationWithId = new Location(1L, "Location", "A location", 1.0, 1.0);
+        Location location = new Location(null, "Location", "A location", 1.0, 1.0, List.of());
+        Location locationWithId = new Location(1L, "Location", "A location", 1.0, 1.0, List.of());
 
         Mockito.when(locationService.update(locationWithId)).thenReturn(true);
 
@@ -161,7 +161,7 @@ class LocationControllerTests {
 
     @Test
     void requestUpdateWithDifferentIdsShouldRespondBadRequest() throws Exception {
-        Location location = new Location(1L, "Location", "A location", 1.0, 1.0);
+        Location location = new Location(1L, "Location", "A location", 1.0, 1.0, List.of());
 
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(location);

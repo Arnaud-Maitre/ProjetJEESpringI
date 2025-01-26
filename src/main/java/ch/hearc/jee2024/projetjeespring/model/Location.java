@@ -1,21 +1,31 @@
 package ch.hearc.jee2024.projetjeespring.model;
 
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Table(name = "location")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
 public class Location {
 
     public Location() {
     }
 
-    public Location(Long id, String name, String description, Double lat, Double lon) {
+    public Location(Long id, String name, String description, Double lat, Double lon, List<Review> reviews) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.latitude = lat;
         this.longitude = lon;
+        this.reviews = reviews;
     }
 
     @Id
@@ -32,6 +42,11 @@ public class Location {
 
     @Column(nullable = false)
     private Double longitude;
+
+    @OneToMany(mappedBy = "location", fetch = FetchType.LAZY)
+    @OnDelete(action= OnDeleteAction.CASCADE)
+    @JsonIdentityReference()
+    List<Review> reviews;
 
     public void setId(Long id) {
         this.id = id;
@@ -71,6 +86,14 @@ public class Location {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
     }
 
     @Override

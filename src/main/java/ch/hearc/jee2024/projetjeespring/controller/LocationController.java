@@ -1,4 +1,4 @@
-package ch.hearc.jee2024.projetjeespring;
+package ch.hearc.jee2024.projetjeespring.controller;
 
 import ch.hearc.jee2024.projetjeespring.model.Location;
 import ch.hearc.jee2024.projetjeespring.service.LocationService;
@@ -24,13 +24,13 @@ public class LocationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Location> show(@PathVariable int id) {
+    public ResponseEntity<Location> show(@PathVariable long id) {
         return locationService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<Location> create(@RequestBody Location location) {
         return ResponseEntity.status(201).body(locationService.create(location));
     }
@@ -47,7 +47,7 @@ public class LocationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable int id) {
+    public ResponseEntity<String> delete(@PathVariable long id) {
         if (locationService.delete(id))
             return ResponseEntity.noContent().build();
         return ResponseEntity.notFound().build();
